@@ -54,7 +54,16 @@ reactionController.saveReaction = catchAsync(async (req, res, next) => {
 });
 reactionController.getReaction = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
-  const { blogId } = req.body;
+  const { blogId } = req.query;
+  let react = await Reaction.find({ blogId: blogId, author: currentUserId });
+  if (!react)
+    throw new AppError(400, "Reaction not found", "Get reaction error");
+
+  return sendResponse(res, 200, true, react, null, "Get reaction successful");
+});
+reactionController.getAllReactionOfUser = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+
   let react = await Reaction.find({ author: currentUserId });
   if (!react)
     throw new AppError(400, "Reaction not found", "Get reaction error");

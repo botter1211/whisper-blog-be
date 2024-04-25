@@ -36,7 +36,7 @@ blogController.createNewBlog = catchAsync(async (req, res, next) => {
   const {
     content,
     title,
-
+    category,
     coverImage,
     status,
     isAllowComment,
@@ -45,7 +45,7 @@ blogController.createNewBlog = catchAsync(async (req, res, next) => {
 
   let blog = await Blog.create({
     title,
-
+    category,
     content,
     coverImage,
     status,
@@ -78,6 +78,7 @@ blogController.updateBlog = catchAsync(async (req, res, next) => {
   const allows = [
     "title",
     "coverImage",
+    "category",
     "content",
     "status",
     "isAllowComment",
@@ -142,6 +143,7 @@ blogController.getAllBlogsOfUser = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+      ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
   const filterCriteria = filterConditions.length
@@ -180,6 +182,7 @@ blogController.getPublishedBlogsOfUser = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+      ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
   const filterCriteria = filterConditions.length
@@ -230,6 +233,7 @@ blogController.getBlogs = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+      ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
   const filterCriteria = filterConditions.length
@@ -275,6 +279,36 @@ blogController.getCommentsOfBlog = catchAsync(async (req, res, next) => {
     null,
     "Get comments successful"
   );
+});
+
+blogController.getAllBlogsForGuest = catchAsync(async (req, res, next) => {
+  let { page, limit, ...filter } = { ...req.query };
+
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+
+  const filterConditions = [{ isDeleted: false }];
+  if (filter.title) {
+    filterConditions.push({
+      ["title"]: { $regex: filter.title, $options: "i" },
+      ["category"]: { $regex: filter.category, $options: "i" },
+    });
+  }
+  const filterCriteria = filterConditions.length
+    ? { $and: filterConditions }
+    : {};
+
+  const count = await Blog.countDocuments(filterCriteria);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
+
+  let blogs = await Blog.find(filterCriteria)
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate("author");
+
+  sendResponse(res, 200, true, { blogs, totalPages, count }, null, "");
 });
 
 module.exports = blogController;

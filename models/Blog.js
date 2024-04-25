@@ -21,6 +21,7 @@ const blogSchema = Schema(
       default: "draft",
       required: true,
     },
+    category: { type: String, default: "" },
     isAllowComment: { type: Boolean, default: true },
     isAllowReaction: { type: Boolean, default: true },
     canonicalUrl: { type: String, unique: true },

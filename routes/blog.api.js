@@ -124,4 +124,10 @@ router.get(
   blogController.getCommentsOfBlog
 );
 
+/**
+ * @route GET /blogs
+ * @description Get blogs for guest
+
+ */
+router.get("/", blogController.getAllBlogsForGuest);
 module.exports = router;

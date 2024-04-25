@@ -25,4 +25,10 @@ router.get(
 
   reactionController.getReaction
 );
+router.get(
+  "/",
+  authentication.loginRequired,
+
+  reactionController.getAllReactionOfUser
+);
 module.exports = router;
