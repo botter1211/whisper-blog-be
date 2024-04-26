@@ -143,6 +143,10 @@ blogController.getAllBlogsOfUser = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+    });
+  }
+  if (filter.category) {
+    filterConditions.push({
       ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
@@ -182,6 +186,10 @@ blogController.getPublishedBlogsOfUser = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+    });
+  }
+  if (filter.category) {
+    filterConditions.push({
       ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
@@ -233,6 +241,10 @@ blogController.getBlogs = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+    });
+  }
+  if (filter.category) {
+    filterConditions.push({
       ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
@@ -291,6 +303,10 @@ blogController.getAllBlogsForGuest = catchAsync(async (req, res, next) => {
   if (filter.title) {
     filterConditions.push({
       ["title"]: { $regex: filter.title, $options: "i" },
+    });
+  }
+  if (filter.category) {
+    filterConditions.push({
       ["category"]: { $regex: filter.category, $options: "i" },
     });
   }
