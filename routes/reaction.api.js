@@ -19,16 +19,16 @@ router.post(
   ]),
   reactionController.saveReaction
 );
+/**
+ * @route GET /reactions
+ * @description Get reaction of blog
+ * @access login required
+ * @body {blogId}
+ */
+router.get("/", authentication.loginRequired, reactionController.getReaction);
 router.get(
   "/",
   authentication.loginRequired,
-
-  reactionController.getReaction
-);
-router.get(
-  "/",
-  authentication.loginRequired,
-
   reactionController.getAllReactionOfUser
 );
 module.exports = router;

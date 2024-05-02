@@ -71,4 +71,21 @@ subscriptionController.buySubscription365days = catchAsync(
   }
 );
 
+subscriptionController.getSubscription = catchAsync(async (req, res, next) => {
+  const buyerId = req.params.userId;
+
+  const subscription = await Subscription.find({
+    buyerId,
+  });
+
+  sendResponse(
+    res,
+    200,
+    true,
+    subscription,
+    null,
+    "Get Subscription successful"
+  );
+});
+
 module.exports = subscriptionController;

@@ -29,5 +29,14 @@ router.post(
   authentication.loginRequired,
   subscriptionController.buySubscription365days
 );
+router.get(
+  "/:userId",
+
+  authentication.loginRequired,
+  validators.validate([
+    param("userId").exists().isString().custom(validators.checkObjectId),
+  ]),
+  subscriptionController.getSubscription
+);
 
 module.exports = router;
